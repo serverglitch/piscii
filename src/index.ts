@@ -125,7 +125,7 @@ const drawAscii = (grayScales: number[], pixelColors: Color[], xTermColors: stri
       xterm.line += (xterm.lastColor === xcolor) ? rampChar : `|${xcolor}${rampChar}`;
       html.line += (JSON.stringify(html.lastColor) === JSON.stringify(color)) ?
         rampChar :
-        `${html.line !== '' ? '</span>' : ''}<span style="color:rgb(${color.r},${color.g},${color.b})">${rampChar}`;
+        `${/^\s+$/.exec(html.line) === null ? '</span>' : ''}<span style="color:rgb(${color.r},${color.g},${color.b})">${rampChar}`;
     } else {
       xterm.line += ' ';
       html.line += ' ';
