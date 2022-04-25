@@ -148,7 +148,8 @@ const drawAscii = (grayScales: number[], pixelColors: Color[], xTermColors: stri
     html.lastColor = color;
   });
 
-  // trim as much from lines as possible before converting to lower char length
+  // trim as much from lines as possible before converting to keep length of final
+  // output short
   xTermData!.innerText = xterm.lines.map((l, i) => {
     const prefix = i === 0 ? '|000' : '';
     return prefix + l.slice(leastSpaces).trimEnd().replace(/[ ]/gm, '|_');
