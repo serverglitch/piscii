@@ -12,13 +12,11 @@ const xTermData = document.getElementById('xterm');
 const context = canvas!.getContext('2d');
 
 const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
-const scaleInput = document.getElementById('scale');
+const scaleInput = document.getElementById('scale') as HTMLInputElement;
 const size = {
   width: 100,
   height: 100
 };
-
-nearestColor
 
 // https://www.kdnuggets.com/2019/12/convert-rgb-image-grayscale.html
 // gamma correction with a linear approximation is too strongly separated in xterm colors
@@ -102,7 +100,7 @@ const renderImage = () => {
 
 fileInput.onchange = (e) => {
   // @ts-ignore
-  const file = e!.target.files[0];
+  const file = e.target.files[0];
   reader.onload = renderImage;
   reader.readAsDataURL(file);
 };
