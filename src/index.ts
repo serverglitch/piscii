@@ -18,6 +18,8 @@ const size = {
   height: 100
 };
 
+nearestColor
+
 // https://www.kdnuggets.com/2019/12/convert-rgb-image-grayscale.html
 // gamma correction with a linear approximation is too strongly separated in xterm colors
 // const toGrayScale = (r, g, b, a) => (0.299 * r + 0.587 * g + 0.114 * b) * (a / 255);
@@ -67,7 +69,7 @@ const convertImage = (context: CanvasRenderingContext2D, width: number, height: 
     imageData.data[i] = imageData.data[i+1] = imageData.data[i+2] = imageData.data[i+3] = grayScale;
 
     grayScales.push(grayScale);
-    const nearest = nearestColor({ r, g, b }, colorList);
+    const nearest = nearestColor.from(colorList)({ r, g, b });
     pixelColors.push({...nearest.rgb, a} as Color);
 
     xTermColors.push(xList[nearest.name as keyof ColorList]);

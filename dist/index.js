@@ -730,7 +730,7 @@
       const grayScale = toGrayScale(r, g, b);
       imageData.data[i] = imageData.data[i + 1] = imageData.data[i + 2] = imageData.data[i + 3] = grayScale;
       grayScales.push(grayScale);
-      const nearest = (0, import_nearest_color.default)({ r, g, b }, colorList);
+      const nearest = import_nearest_color.default.from(colorList)({ r, g, b });
       pixelColors.push(__spreadProps(__spreadValues({}, nearest.rgb), { a }));
       xTermColors.push(xList[nearest.name]);
     }

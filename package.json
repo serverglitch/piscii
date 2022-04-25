@@ -8,7 +8,7 @@
   "private": false,
   "scripts": {
     "build:css": "esbuild  --bundle ./src/style.css --outfile=dist/style.css",
-    "build:js": "esbuild ./src/index.ts --bundle --outfile=dist/index.js --loader:.html=text",
+    "build:js": "esbuild ./src/index.ts --bundle --outfile=dist/index.js",
     "build": "yarn build:css && yarn build:js"
   },
   "dependencies": {
