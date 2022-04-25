@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Pixel to xTerm256</title>
+    <link href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet">
+    <rel link="./src/style.css"></rel>
+</head>
+<body>
+    <header>
+        <h1>Pixel to xTerm256 Ascii</h1>
+        <p>
+          Load in a file from your favorite pixel app (something
+          like <a href="https://www.pixilart.com/draw" target="_blank">pixilart.com</a>) and
+          copy/paste to <a href="http://muse.arxmush.org" target="_blank">muse</a> to add text
+          or click the button below for the ascii game code.
+        </p>
+    </header>
+    <p>Scale constrains the larger of width or height based on the original image.</p>
+    <label for="scale">Scale</label>
+    <input type="number" id="scale" name="scale" value="100">
+
+    <input type="file" name="picture" />
+    <canvas id="preview" style="display: none;"></canvas>
+    <div id="copy-text">
+      <button id="clip" onclick="copyToClipboard()">Get Ascii</button> <span class="copied">Copied!</span>
+    </div>
+    <div id="ascii"></div>
+    <pre id="xterm" style="display: none;"></pre>
+    <script type="module" src="./dist/index.js"></script>
+    <script type="text/javascript">
+      const copyToClipboard = () => {
+        const el = document.getElementById('xterm');
+        navigator.clipboard.writeText(el.innerText);
+        let notify = document.querySelector('.copied');
+        notify.classList.toggle('show');
+        setTimeout(() => notify.classList.toggle('show'), 500);
+      };
+    </script>
+</body>
+</html>

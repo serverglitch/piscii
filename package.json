@@ -1,0 +1,22 @@
+{
+  "name": "piscii",
+  "version": "0.1.0",
+  "description": "color pixel art to ascii xTerm256 art renderer",
+  "main": "./src/index.ts",
+  "author": "serverglitch",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build:css": "esbuild  --bundle ./src/style.css --outfile=dist/style.css",
+    "build:js": "esbuild ./src/index.ts --bundle --outfile=dist/index.js --loader:.html=text",
+    "build": "yarn build:css && yarn build:js"
+  },
+  "dependencies": {
+    "nearest-color": "^0.4.4"
+  },
+  "devDependencies": {
+    "esbuild": "^0.14.38",
+    "tsc": "^2.0.4",
+    "typescript": "^4.6.3"
+  }
+}
