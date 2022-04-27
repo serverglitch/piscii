@@ -122,7 +122,6 @@ const drawAscii = (grayScales: number[], pixelColors: NearestColor[], xTermColor
     let xcolor = xTermColors[index];
     if (color.value !== '000000') {
       xterm.line += (xterm.lastColor === xcolor) ? rampChar : `|${xcolor}${rampChar}`;
-      console.log(html.lastColor, color.value);
       html.line += (html.lastColor === color.value) ?
         rampChar :
         `${/^\s+$/.exec(html.line) === null ? '</span>' : ''}<span style="color:#${color.value}">${rampChar}`;
