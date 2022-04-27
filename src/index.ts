@@ -1,6 +1,6 @@
 import { colorList, xList } from "./colors";
 import nearestColor from "nearest-color";
-import { Color, ColorList, ImageConversion } from "./types";
+import { Color, ColorList, ImageConversion, NearestColor } from "./types";
 
 /**
  * Many elements of the ascii portion of this are from the following ascii converter:
@@ -55,7 +55,7 @@ const convertImage = (context: CanvasRenderingContext2D, width: number, height: 
   const imageData = context.getImageData(0, 0, width, height);
   const grayScales: number[] = [];
   const xTermColors: string[] = [];
-  const pixelColors: Color[] = [];
+  const pixelColors: NearestColor[] = [];
 
   for (let i = 0; i < imageData.data.length; i += 4) {
     const r = imageData.data[i];
@@ -68,8 +68,7 @@ const convertImage = (context: CanvasRenderingContext2D, width: number, height: 
 
     grayScales.push(grayScale);
     const nearest = nearestColor.from(colorList)({ r, g, b });
-    pixelColors.push({...nearest.rgb, a} as Color);
-
+    pixelColors.push(nearest);
     xTermColors.push(xList[nearest.name as keyof ColorList]);
   }
 
@@ -112,7 +111,7 @@ const rampLength = grayRamp.length;
 
 const convertToChar = (grayScale: number): string => grayRamp[Math.ceil((rampLength - 1) * grayScale / 255)];
 
-const drawAscii = (grayScales: number[], pixelColors: Color[], xTermColors: string[], width:number): void => {
+const drawAscii = (grayScales: number[], pixelColors: NearestColor[], xTermColors: string[], width:number): void => {
   const html: ImageConversion = { lines: [], line: '', lastColor: null };
   const xterm: ImageConversion = { lines: [], line: '', lastColor: null };
   let leastSpaces = 10000;
@@ -121,11 +120,12 @@ const drawAscii = (grayScales: number[], pixelColors: Color[], xTermColors: stri
     const rampChar = convertToChar(scale);
     let color = pixelColors[index];
     let xcolor = xTermColors[index];
-    if (color.a !== 0) {
+    if (color.value !== '000000') {
       xterm.line += (xterm.lastColor === xcolor) ? rampChar : `|${xcolor}${rampChar}`;
-      html.line += (JSON.stringify(html.lastColor) === JSON.stringify(color)) ?
+      console.log(html.lastColor, color.value);
+      html.line += (html.lastColor === color.value) ?
         rampChar :
-        `${/^\s+$/.exec(html.line) === null ? '</span>' : ''}<span style="color:rgb(${color.r},${color.g},${color.b})">${rampChar}`;
+        `${/^\s+$/.exec(html.line) === null ? '</span>' : ''}<span style="color:#${color.value}">${rampChar}`;
     } else {
       xterm.line += ' ';
       html.line += ' ';
@@ -137,7 +137,7 @@ const drawAscii = (grayScales: number[], pixelColors: Color[], xTermColors: stri
       const i = html.line.search(/\S/);
       if (i < leastSpaces && i > -1) { leastSpaces = i };
       if (/^\s+$/.exec(html.line) === null) {
-        html.lines.push(html.line);
+        html.lines.push(html.line + '</span>');
         xterm.lines.push(xterm.line);
       }
       xterm.line = '';
@@ -145,7 +145,7 @@ const drawAscii = (grayScales: number[], pixelColors: Color[], xTermColors: stri
     }
 
     xterm.lastColor = xcolor;
-    html.lastColor = color;
+    html.lastColor = color.value;
   });
 
   // trim as much from lines as possible before converting to keep length of final
@@ -154,7 +154,7 @@ const drawAscii = (grayScales: number[], pixelColors: Color[], xTermColors: stri
     const prefix = i === 0 ? '|000' : '';
     return prefix + l.slice(leastSpaces).trimEnd().replace(/[ ]/gm, '|_');
   }).join('|/');
-  asciiImage!.innerHTML = html.lines.map(l => l.slice(leastSpaces).trimEnd()).join('<br>');
+  asciiImage!.innerHTML = html.lines.map(l => l.slice(leastSpaces).trimEnd()).join('\n');
 };
 
 const updateValue = (e: any) => {

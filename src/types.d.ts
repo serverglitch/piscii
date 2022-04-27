@@ -5,6 +5,13 @@ export type Color = {
   a: number
 }
 
+export type NearestColor = {
+  distance: number,
+  name: string,
+  rgb: Color,
+  value: string
+}
+
 export type ColorList = {
   [x: string]: string
 }
@@ -12,6 +19,6 @@ export type ColorList = {
 export type ImageConversion = {
   lines: string[],
   line: string,
-  lastColor: Color | string | null
+  lastColor: NearestColor | Color | string | null
 }
 
